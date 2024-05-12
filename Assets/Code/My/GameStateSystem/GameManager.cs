@@ -6,6 +6,8 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.Playables;
 
+
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
@@ -18,6 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerAnimatorController playerAnimatorController;
     [SerializeField] private PhysicsMovement movementController;
     [SerializeField] private CutSceneManager cutSceneManager;
+    [SerializeField] private TherdCamera therdCamera;
 
 
 
@@ -79,6 +82,7 @@ public class GameManager : MonoBehaviour
     {
         //Time.timeScale = 0;
         movementController.enabled = false;
+        therdCamera.enabled = false;
         Cursor.lockState = CursorLockMode.Confined;
         playerAnimatorController.SetDeathAnimation();
 
@@ -87,6 +91,7 @@ public class GameManager : MonoBehaviour
     private void HandleWinGame()
     {
         //ime.timeScale = 0;
+        therdCamera.enabled = false;
         movementController.enabled = false;
         Cursor.lockState = CursorLockMode.Confined;
         playerAnimatorController.SetFinishAnimation();
@@ -106,6 +111,7 @@ public class GameManager : MonoBehaviour
         
         Time.timeScale = 1;
         movementController.enabled = true;
+        therdCamera.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
         
     }
@@ -122,6 +128,7 @@ public class GameManager : MonoBehaviour
         print(cutSceneManager.num);
         cutSceneManager.PlayCutScene();
         movementController.enabled = false;
+        therdCamera.enabled = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
 

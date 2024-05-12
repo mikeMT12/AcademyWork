@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1603,12 +1603,12 @@ PrefabInstance:
     - target: {fileID: 499189621089249053, guid: c7071f1f1d0243847ac4a415659e8c5b,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.011027351
+      value: 0.011027306
       objectReference: {fileID: 0}
     - target: {fileID: 499189621089249053, guid: c7071f1f1d0243847ac4a415659e8c5b,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.69004536
+      value: -0.6900453
       objectReference: {fileID: 0}
     - target: {fileID: 499189621089249053, guid: c7071f1f1d0243847ac4a415659e8c5b,
         type: 3}
@@ -1705,6 +1705,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5608198984456217396, guid: c7071f1f1d0243847ac4a415659e8c5b,
+        type: 3}
+      propertyPath: m_YDamping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5793867381103249768, guid: c7071f1f1d0243847ac4a415659e8c5b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1765,7 +1770,8 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6934809383223590301, guid: c7071f1f1d0243847ac4a415659e8c5b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1944,6 +1950,7 @@ MonoBehaviour:
   playerAnimatorController: {fileID: 1444389476}
   movementController: {fileID: 31871063}
   cutSceneManager: {fileID: 481812155}
+  therdCamera: {fileID: 1447232530}
 --- !u!114 &728915080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2003,7 +2010,7 @@ MonoBehaviour:
   - {fileID: 301112841}
   spawn: {fileID: 1341179013}
   healthSystem: {fileID: 31871066}
-  cutSceneManager: {fileID: 0}
+  cutSceneManager: {fileID: 481812155}
 --- !u!1 &735264526
 GameObject:
   m_ObjectHideFlags: 0
@@ -3830,6 +3837,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1447232530 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1106840590288044742, guid: c7071f1f1d0243847ac4a415659e8c5b,
+    type: 3}
+  m_PrefabInstance: {fileID: 655152316}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1447232520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dedccf5de2e29840be57845009705af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1479416338
 GameObject:
   m_ObjectHideFlags: 0
