@@ -23,8 +23,7 @@ public class HealthSystem : MonoBehaviour
 		//EventBus.Instance.TakeHeal.AddListener(Heal);
 		//EventBus.TakeDamage.AddListener(Damage);
 		EventBus.TakeDamage += Damage;
-		currentHealth = maxHealth;
-		healthBar.SetMaxHealth(maxHealth);
+		SetMaxHealth();
     }
 
     // Update is called once per frame
@@ -55,8 +54,14 @@ public class HealthSystem : MonoBehaviour
 		healthBar.SetHealth(currentHealth);
 	}
 
+	public void SetMaxHealth()
+    {
+		currentHealth = maxHealth;
+		healthBar.SetMaxHealth(maxHealth);
+	}
+
 	public void Death()
     {
-		
-    }
+		GameManager.Instance.UpdateGameState(GameManager.GameState.Lose);
+	}
 }

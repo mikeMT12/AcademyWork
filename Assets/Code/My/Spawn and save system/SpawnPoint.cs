@@ -11,6 +11,12 @@ public class SpawnPoint : MonoBehaviour
     public bool setActive = false;
     void Awake()
     {
+
+        SpawnPlayer();
+    }
+
+    public void SpawnPlayer()
+    {
         if (setActive)
         {
             player.transform.position = transform.position;
@@ -20,7 +26,6 @@ public class SpawnPoint : MonoBehaviour
         {
             Instantiate(player, transform.position, transform.rotation);
         }
-        
     }
 
 }

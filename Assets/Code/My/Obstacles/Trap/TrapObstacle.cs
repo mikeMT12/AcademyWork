@@ -7,6 +7,7 @@ public class TrapObstacle : MonoBehaviour
     public int damage;
     public LayerMask layerDamage;
     private bool isTrapActive = false;
+    private bool isDamaged = false;
     //private EventBus eventBus;
     //[SerializeField] private GameObject triggerCollider;
 
@@ -21,23 +22,8 @@ public class TrapObstacle : MonoBehaviour
         SetMaterial(inActiveMaterial);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    /*public void Bind(EventBus EventBus)
-    {
-        eventBus = EventBus;
-    }*/
-
-
     public void DamagePlayer()
     {
-        //EventBus.Instance.TakeDamage?.Invoke(damage);
-        //EventBus.TriggerTakeDamage(damage);
-        
         SetMaterial(DamageMaterial);
         EventBus.TakeDamage.Invoke(damage);
         print("DAMAGE!");
@@ -53,63 +39,68 @@ public class TrapObstacle : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
-
             StartCoroutine(ActivateTrap());
-            
         }
     }
 
     private IEnumerator ActivateTrap()
     {
-        
+        isDamaged = false;
         if (isTrapActive == false)
         {
             isTrapActive = true;
             //Debug.Log("SetTrapActive");
             SetMaterial(ActiveMaterial);
             //Debug.Log("You get in the TRAP! 1 second to damage!");
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(2);
             CheckDamage();
+            if (!isDamaged)
+            {
+                SetMaterial(DamageMaterial);
+            }
             //DamagePlayer();
             yield return new WaitForSeconds(0.3f);
             SetMaterial(inActiveMaterial);
+            Debug.Log("HaveWait5sec");
             yield return new WaitForSeconds(5);
-            //Debug.Log("HaveWait5sec");
             isTrapActive = false;
-
-
-        }
-        //ChechOverlap(CheckDamage());
-
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, GetComponent<BoxCollider>().size.x);
-        for(int i = 0; i < hitColliders.Length; i++)
-        {
-            print(hitColliders[i].gameObject.name);
-            if (hitColliders[i].gameObject.tag == "Player")
+            Debug.Log("WAITED");
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, GetComponent<CapsuleCollider>().radius * transform.localScale.x);
+            for (int i = 0; i < hitColliders.Length; i++)
             {
-                isTrapActive = false;
-                StartCoroutine(ActivateTrap());
-                break;
+                print($"HIT STAING - {hitColliders[i].gameObject.name}");
+                if (hitColliders[i].gameObject.tag == "Player")
+                {
+                    print($"HIT STAING Player - {hitColliders[i].gameObject.name}");
+                    StartCoroutine(ActivateTrap());
+                    break;
+                }
             }
         }
-        
+        //ChechOverlap(CheckDamage())
+    }
+    private void Update()
+    {
+        //Debug.DrawRay(transform.position, transform.right * GetComponent<CapsuleCollider>().radius * transform.localScale.x,Color.black);
     }
 
     private void CheckDamage()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 4f);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, GetComponent<CapsuleCollider>().radius * transform.localScale.x);
+       
         //Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, GetComponent<BoxCollider>().size / 2, Quaternion.identity, layerDamage);
         for (int i = 0; i < hitColliders.Length; i++)
         {
-            print(hitColliders[i].gameObject.name);
+            print($"HIT TO DAMAGE - {hitColliders[i].gameObject.name}");
             if (hitColliders[i].gameObject.tag == "Player")
             {
-                isTrapActive = false;
+                print($"HIT TO DAMAGE Player - {hitColliders[i].gameObject.name}");
+                //isTrapActive = false;
                 DamagePlayer();
+                isDamaged = true;
                 break;  
             }
         }
-        
     }
 
    /* private void ChechOverlap (var voidTodo)

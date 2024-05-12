@@ -4,15 +4,30 @@ using UnityEngine;
 
 public class PlayerAnimatorController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    [SerializeField] private Animator playerAnimnator;
+    //[SerializeField] private Animation deathAnimation;
+    int isDeadHash;
+    int isFinished;
+
+
+    private void Awake()
     {
-        
+        isDeadHash = Animator.StringToHash("isDead");
+        isFinished = Animator.StringToHash("isFinished");
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetDeathAnimation()
     {
-        
+        //playerAnimnator.SetBool(isDeadHash, true);
+        playerAnimnator.Play("isDead");
     }
+
+    public void SetFinishAnimation()
+    {
+        //playerAnimnator.SetBool(isFinished, true);
+        playerAnimnator.Play("isFinished");
+    }
+
+
 }

@@ -127,7 +127,7 @@ public class PhysicsMovement : MonoBehaviour
         /// Mode - Walking
         if (grounded)
         {
-            Debug.Log(moveSpeed);
+            //Debug.Log(moveSpeed);
             nowspeed = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
             if (nowspeed.magnitude > 2)
