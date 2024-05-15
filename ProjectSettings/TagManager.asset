@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - groung
+  - MusicOnButton
+  - MusicOffButton
+  - Game
   layers:
   - Default
   - TransparentFX

@@ -64,4 +64,9 @@ public class HealthSystem : MonoBehaviour
     {
 		GameManager.Instance.UpdateGameState(GameManager.GameState.Lose);
 	}
+
+    private void OnDestroy()
+    {
+		EventBus.TakeDamage -= Damage;
+	}
 }
