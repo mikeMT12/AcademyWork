@@ -2,33 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Timer : MonoBehaviour
 {
     private int sec = 0;
     private int min = 0;
-    private Text timeFlowText;
+    public TextMeshProUGUI timeFlowText;
     public int delta = 1;
-
-    
-    void Start()
+    public Dictionary<GameManager.GameState, Color> timerColors = new() 
     {
+        {GameManager.GameState.Pause, Color.white},
+        {GameManager.GameState.Win, Color.black},
+        {GameManager.GameState.Lose, Color.black}
+    };
 
+    private void Awake()
+    {
+        timeFlowText.gameObject.SetActive(false);
+        delta = 0;
         StartCoroutine(TimeFlow());
-
-
     }
 
-    /*void OnTriggerEnter(Collider col)
+    public void ContinueTimer()
     {
-        if (col.gameObject.tag == "Player")
-        {
 
-            delta = 0;
-            Debug.Log("Дошел до конца");
-        }
-    }*/
-    IEnumerator TimeFlow()
+        delta = 1;
+        timeFlowText.gameObject.SetActive(false);
+    } 
+
+    public void StopTimer() 
+    {
+        
+        delta = 0;
+        timeFlowText.color = timerColors[GameManager.Instance.state];
+        timeFlowText.gameObject.SetActive(true);
+    } 
+
+    public IEnumerator TimeFlow()
     {
         while (true)
         {
@@ -37,8 +48,9 @@ public class Timer : MonoBehaviour
                 min++;
                 sec = -1;
             }
+            print(delta);
             sec += delta;
-            //timeFlowText.text = min.ToString("D2") + " : " + sec.ToString("D2");
+            timeFlowText.text = min.ToString("D2") + " : " + sec.ToString("D2");
             yield return new WaitForSeconds(1);
         }
     }

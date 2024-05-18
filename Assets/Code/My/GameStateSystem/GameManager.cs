@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public GameState state;
+    public GameState lastState;
     public static bool FerstTime = true;
 
     public static event Action<GameState> OnGameStateChanged;
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CutSceneManager cutSceneManager;
     [SerializeField] private TherdCamera therdCamera;
     [SerializeField] private WorldInfo worldInfo;
+    [SerializeField] private Timer timer;
 
 
 
@@ -58,6 +60,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateGameState(GameState newState)
     {
+        lastState = state;
         state = newState;
 
         switch (newState)
@@ -100,6 +103,7 @@ public class GameManager : MonoBehaviour
         //Time.timeScale = 0;
         movementController.enabled = false;
         therdCamera.enabled = false;
+        timer.StopTimer();
         Cursor.lockState = CursorLockMode.Confined;
         playerAnimatorController.SetDeathAnimation();
 
@@ -110,6 +114,7 @@ public class GameManager : MonoBehaviour
         //ime.timeScale = 0;
         therdCamera.enabled = false;
         movementController.enabled = false;
+        timer.StopTimer();
         Cursor.lockState = CursorLockMode.Confined;
         playerAnimatorController.SetFinishAnimation();
         worldInfo.PlusCrowns();
@@ -118,22 +123,24 @@ public class GameManager : MonoBehaviour
 
     private void HandlePauseGame()
     {
-        Debug.Log("pause");
         Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.Confined;
+        if (!FerstTime)
+        {
+            timer.StopTimer();
+        }
+        
         
     }
 
     private void HandleGame()
-    {
-        Debug.Log("game");
-        
+    { 
         Time.timeScale = 1;
         therdCamera.gameObject.SetActive(true);
         movementController.enabled = true;
-        
+        timer.timeFlowText.color = Color.black;
+        timer.ContinueTimer();
         Cursor.lockState = CursorLockMode.Locked;
-        
     }
 
     /*private void HandleStartWindow()
@@ -143,26 +150,19 @@ public class GameManager : MonoBehaviour
 
     private void HandleStartGame()
     {
-        Debug.Log("Startgame");
         Time.timeScale = 1;
+        timer.timeFlowText.gameObject.SetActive(false);
         cutSceneManager.PlayCutScene();
         Debug.Log(cutSceneManager.over);
         Debug.Log(GameState.StartGame);
-        print("no over");
         movementController.enabled = false;
         therdCamera.gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         FerstTime = false;
-        /*if (cutSceneManager.over)
-        {
-            GameStateFromCutScene();
-        }*/
     }
 
     public void GameStateFromCutScene()
     {
-        print("SSSS");
         UpdateGameState(GameState.Game);
-        //OnGameStateChanged?.Invoke(GameState.Game);
     }
 }

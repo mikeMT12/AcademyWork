@@ -23,7 +23,6 @@ public class CutSceneManager : MonoBehaviour
         }
         else
         {
-            print("over");
             over = true;
             //cutScenes[0].Play();
             //GameManager.Instance.UpdateGameState(GameManager.GameState.Game);
@@ -35,7 +34,6 @@ public class CutSceneManager : MonoBehaviour
     public void Skip()
     {
         num += 1;
-        print(num);
     }
 
 

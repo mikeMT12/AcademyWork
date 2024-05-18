@@ -7,9 +7,9 @@ public class KillZone : MonoBehaviour
 {
     void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject.name == "PlayerObject")
         {
-			col.gameObject.GetComponent<CharacterControls>().LoadCheckPoint();
+			col.gameObject.GetComponent<PhysicsMovement>().LoadCheckPoint();
 		}
 	}
 }

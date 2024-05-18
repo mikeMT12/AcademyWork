@@ -97,7 +97,6 @@ public class UIManager : MonoBehaviour
     private void OnPauseGameButtonClick(InputAction.CallbackContext context)
     {
         //bool x = context.ReadValue<bool>();
-        print($" - pause");
         if (!isPaused)
         {
             GameManager.Instance.UpdateGameState(GameManager.GameState.Pause);
@@ -105,8 +104,9 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            GameManager.Instance.UpdateGameState(GameManager.GameState.Game);
+            GameManager.Instance.UpdateGameState(GameManager.Instance.lastState);
             isPaused = false;
+            Time.timeScale = 1;
         }
             
     }
@@ -120,9 +120,6 @@ public class UIManager : MonoBehaviour
 
     private void UIOnGameStateChanged(GameManager.GameState state)
     {
-        print(state);
-        print(gameWindow.name);
-        
         pauseWindow.SetActive(state == GameManager.GameState.Pause);
         winWindow.SetActive(state == GameManager.GameState.Win);
         loseWindow.SetActive(state == GameManager.GameState.Lose);

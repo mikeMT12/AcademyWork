@@ -55,6 +55,10 @@ public class PhysicsMovement : MonoBehaviour
     [Header("Variabels Out")]
     public MovementState state;
 
+    [Header("Level")]
+    [SerializeField] private SpawnPoint spawnPoint;
+    public Vector3 checkPoint;
+
     public enum MovementState
     {
         staing,
@@ -66,6 +70,8 @@ public class PhysicsMovement : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        spawnPoint.SpawnPlayer(this.gameObject);
+        checkPoint = spawnPoint.transform.position;
     }
 
     private void Start()
@@ -262,6 +268,11 @@ public class PhysicsMovement : MonoBehaviour
     {
         /// reset jump
         readyToJump = true;
+    }
+
+    public void LoadCheckPoint()
+    {
+        transform.position = checkPoint;
     }
 
     private void TextStuff()

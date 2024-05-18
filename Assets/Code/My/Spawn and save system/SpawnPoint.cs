@@ -5,17 +5,17 @@ using UnityEngine;
 public class SpawnPoint : MonoBehaviour
 {
     [Header("Player")]
-    [SerializeField] private GameObject player;
+    //[SerializeField] private GameObject player;
 
     [Header("Choose option")]
     public bool setActive = false;
     void Awake()
     {
 
-        SpawnPlayer();
+        //SpawnPlayer();
     }
 
-    public void SpawnPlayer()
+    public void SpawnPlayer(GameObject player)
     {
         if (setActive)
         {
