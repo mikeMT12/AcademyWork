@@ -133,6 +133,7 @@ public class PhysicsMovement : MonoBehaviour
         /// Mode - Walking
         if (grounded)
         {
+            jumped = false;
             //Debug.Log(moveSpeed);
             nowspeed = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
@@ -145,7 +146,7 @@ public class PhysicsMovement : MonoBehaviour
             {
                 state = MovementState.staing;
             }
-                
+              
             desiredMoveSpeed = walkSpeed;
         }
 
