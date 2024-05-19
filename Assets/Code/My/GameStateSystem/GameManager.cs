@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -15,6 +16,8 @@ public class GameManager : MonoBehaviour
     public GameState state;
     public GameState lastState;
     public static bool FerstTime = true;
+
+    public List<GameObject> countdownNums;
 
     public static event Action<GameState> OnGameStateChanged;
     //public static UnityEvent<GameState> OnGameStateChanged;
@@ -49,12 +52,12 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-       
-        if (FerstTime)
+        UpdateGameState(GameState.StartGame);
+        /*if (FerstTime)
             UpdateGameState(GameState.StartGame);
         
         else
-            UpdateGameState(GameState.Game);
+            UpdateGameState(GameState.Game);*/
 
     }
 
@@ -150,7 +153,26 @@ public class GameManager : MonoBehaviour
 
     private void HandleStartGame()
     {
+        cutSceneManager.PlayCutScene();
+        movementController.enabled = false;
+        therdCamera.gameObject.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1;
+        timer.timeFlowText.gameObject.SetActive(false);
+        if (FerstTime)
+        {
+            
+            Debug.Log(cutSceneManager.over);
+            Debug.Log(GameState.StartGame);
+            //StartCoroutine(Countdown());
+            FerstTime = false;
+        }
+        if (cutSceneManager.over)
+        {
+            Debug.Log("StartCountdown");
+            StartCountdown();
+        }
+        /*Time.timeScale = 1;
         timer.timeFlowText.gameObject.SetActive(false);
         cutSceneManager.PlayCutScene();
         Debug.Log(cutSceneManager.over);
@@ -158,11 +180,34 @@ public class GameManager : MonoBehaviour
         movementController.enabled = false;
         therdCamera.gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
-        FerstTime = false;
+        StartCoroutine(Countdown());
+        FerstTime = false;*/
+    }
+
+    private IEnumerator Countdown()
+    {
+        therdCamera.gameObject.SetActive(true);
+        int time = 0;
+        while (time != countdownNums.Count)
+        {
+            countdownNums[time].SetActive(true);
+            yield return new WaitForSeconds(1);
+            countdownNums[time].SetActive(false);
+            time++;
+        }
+        Debug.Log("end countdown");
+        UpdateGameState(GameState.Game);
+
+
     }
 
     public void GameStateFromCutScene()
     {
         UpdateGameState(GameState.Game);
+    }
+
+    public void StartCountdown()
+    {
+        StartCoroutine(Countdown());
     }
 }

@@ -14,8 +14,7 @@ public class CutSceneManager : MonoBehaviour
 
     public void PlayCutScene()
     {
-        
-        
+
         if(num < cutScenes.Count)
         {
             cutSceneCamera.gameObject.SetActive(true);
@@ -26,14 +25,18 @@ public class CutSceneManager : MonoBehaviour
             over = true;
             //cutScenes[0].Play();
             //GameManager.Instance.UpdateGameState(GameManager.GameState.Game);
-        }
-       
+        }  
     }
 
 
     public void Skip()
     {
         num += 1;
+    }
+
+    public void SetOverTrue()
+    {
+        over = true;
     }
 
 
