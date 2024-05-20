@@ -68,19 +68,23 @@ public class SettingsData
 
     public void AudioSet()
     {
-        GameObject buttonOn = GameObject.FindWithTag("MusicOnButton");
-        GameObject buttonOff = GameObject.FindWithTag("MusicOffButton");
-        /*buttonOff.GetComponent<Image>().enabled = false;
-        buttonOff.GetComponent<Button>().enabled = false;*/
+        GameObject musicONImage = GameObject.Find("MusicOnButtonImage");
+        GameObject musicOFFImage = GameObject.Find("MusicOffButtonImage");
+        GameObject musicTurn = GameObject.Find("MusicTurnButton");
+
+
+
 
 
         if (AudioController.volume == 0)
         {
-            AudioController.OnMusic(buttonOn.GetComponent<Image>(), buttonOff.GetComponent<Image>());
+            AudioController.Music(musicTurn.GetComponent<Image>(), musicOFFImage.GetComponent<Image>(), musicONImage.GetComponent<Image>(), false);
+            //AudioController.OnMusic(buttonOn, buttonOff);
         }
         else
         {
-            AudioController.OffMusic(buttonOn.GetComponent<Image>(), buttonOff.GetComponent<Image>());
+            AudioController.Music(musicTurn.GetComponent<Image>(), musicOFFImage.GetComponent<Image>(), musicONImage.GetComponent<Image>(), true);
+            //AudioController.OffMusic(buttonOn, buttonOff);
         }
     }
 }

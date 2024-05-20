@@ -13,34 +13,55 @@ public static class AudioController
         set { _volume = value; }
     }
 
-    public static void OnMusic(Image musicON, Image musicOFF)
+    public static void OnMusic(GameObject musicON, GameObject musicOFF)
     {
 
         AudioListener.volume = 0;
         AudioController.volume = 0;
 
-         musicON.gameObject.SetActive(false);
-         musicOFF.gameObject.SetActive(true);
+         musicON.SetActive(false);
+         musicOFF.SetActive(true);
 
-        /*musicON.gameObject.GetComponent<Button>().enabled = false;
-        musicON.enabled = false;
-        musicOFF.gameObject.GetComponent<Button>().enabled = true;
-        musicOFF.enabled = true;*/
+        
+
+
 
     }
 
-    public static void OffMusic(Image musicON, Image musicOFF)
+    public static void OffMusic(GameObject musicON, GameObject musicOFF)
     {
         AudioListener.volume = 1;
         AudioController.volume = 1;
 
-        musicON.gameObject.SetActive(true);
-        musicOFF.gameObject.SetActive(false);
+        musicON.SetActive(true);
+        musicOFF.SetActive(false);
 
 /*        musicON.gameObject.GetComponent<Button>().enabled = true;
         musicON.enabled = true;
         musicOFF.gameObject.GetComponent<Button>().enabled = false;
         musicOFF.enabled = false;*/
     }
-    
+
+    public static void Music(Image musicButton, Image musicOFF, Image musicON, bool isMusicTurnOn)
+    {
+
+        
+        if (isMusicTurnOn)
+        {
+            musicButton.sprite = musicOFF.sprite;
+            AudioListener.volume = 1;
+            AudioController.volume = 1;
+
+        }
+        else
+        {
+            musicButton.sprite = musicON.sprite;
+            AudioListener.volume = 0;
+            AudioController.volume = 0;
+
+        }
+
+
+    }
+
 }

@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     private PlayerInput playerInput;
     bool isPaused = false;
 
+
     [Header("Windows to show")]
     //[SerializeField] private List<GameObject> windows;
     //[SerializeField] private GameObject startWindow;
@@ -19,6 +20,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject winWindow;
     [SerializeField] private GameObject loseWindow;
     [SerializeField] private GameObject settingsWindow;
+
+    public List<GameObject> countdownNums;
 
     [Header("Buttons")]
     [SerializeField] List<Button> restartGameButtons;
@@ -31,7 +34,7 @@ public class UIManager : MonoBehaviour
     [Header("Systems")]
     [SerializeField] private SpawnPoint spawn;
     [SerializeField] private HealthSystem healthSystem;
-
+    [SerializeField] private SoundAndMusicSystem soundSystem;
     [SerializeField] private CutSceneManager cutSceneManager;
 
 
@@ -39,7 +42,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject DDDD;
 
 
-    private void Awake()
+    public void Init()
     {
         //DontDestroyOnLoad(this.gameObject);
         playerInput = new PlayerInput();
@@ -68,8 +71,9 @@ public class UIManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameManager.OnGameStateChanged -= UIOnGameStateChanged;
         playerInput.UISystem.PauseButton.performed -= OnPauseGameButtonClick;
+        GameManager.OnGameStateChanged -= UIOnGameStateChanged;
+        
     }
 
     private void OnExitGameButtonClick()
@@ -97,16 +101,17 @@ public class UIManager : MonoBehaviour
     private void OnPauseGameButtonClick(InputAction.CallbackContext context)
     {
         //bool x = context.ReadValue<bool>();
-        if (!isPaused)
+        
+        if (isPaused)
+        {
+            GameManager.Instance.UpdateGameState(GameManager.GameState.Game);
+            isPaused = false;
+            Time.timeScale = 1;
+        }
+        else if(!isPaused && GameManager.Instance.state == GameManager.GameState.Game)
         {
             GameManager.Instance.UpdateGameState(GameManager.GameState.Pause);
             isPaused = true;
-        }
-        else
-        {
-            GameManager.Instance.UpdateGameState(GameManager.Instance.lastState);
-            isPaused = false;
-            Time.timeScale = 1;
         }
             
     }
@@ -125,5 +130,31 @@ public class UIManager : MonoBehaviour
         loseWindow.SetActive(state == GameManager.GameState.Lose);
         settingsWindow.SetActive(state == GameManager.GameState.Settings);
         gameWindow.SetActive(state == GameManager.GameState.Game);
+    }
+
+
+    public IEnumerator Countdown()
+    {
+        int time = 0;
+        while (time != countdownNums.Count)
+        {
+            countdownNums[time].SetActive(true);
+            if(time != countdownNums.Count-1)
+                soundSystem.countdownNums.Play();
+            else
+                soundSystem.countdownGo.Play();
+            yield return new WaitForSeconds(1);
+            countdownNums[time].SetActive(false);
+            time++;
+        }
+        Debug.Log("end countdown");
+        Init();
+        GameManager.Instance.UpdateGameState(GameManager.GameState.Game);
+       
+    }
+
+    public void StartCountdown()
+    {
+        StartCoroutine(Countdown());
     }
 }

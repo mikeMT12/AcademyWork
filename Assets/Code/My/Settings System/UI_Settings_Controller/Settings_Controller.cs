@@ -12,8 +12,9 @@ public class Settings_Controller : MonoBehaviour
     [SerializeField] GameObject offCanvas;
     [SerializeField] Button openButton;
     [SerializeField] Button closeButton;
-    [SerializeField] Button musicONImage;    
-    [SerializeField] Button musicOFFImage;
+    [SerializeField] Button musicTurn;
+    [SerializeField] Image musicONImage;    
+    [SerializeField] Image musicOFFImage;
 
     [Space]
     [Header("Rewards Database")]
@@ -58,11 +59,11 @@ public class Settings_Controller : MonoBehaviour
         closeButton.onClick.RemoveAllListeners();
         closeButton.onClick.AddListener(OnCloseButtonClick);
 
-        musicONImage.onClick.RemoveAllListeners();
-        musicONImage.onClick.AddListener(MusicONButtonClick);
+        musicTurn.onClick.RemoveAllListeners();
+        musicTurn.onClick.AddListener(MusicONButtonClick);
 
-        musicOFFImage.onClick.RemoveAllListeners();
-        musicOFFImage.onClick.AddListener(MusicOFFButtonClick);
+        /*musicOFFImage.onClick.RemoveAllListeners();
+        musicOFFImage.onClick.AddListener(MusicOFFButtonClick);*/
 
         /*closeButton.onClick.RemoveAllListeners();
         closeButton.onClick.AddListener(OnCloseButtonClick);*/
@@ -106,12 +107,24 @@ public class Settings_Controller : MonoBehaviour
 
     void MusicONButtonClick()
     {
-        AudioController.OnMusic(musicONImage.image, musicOFFImage.image);
+        if (AudioController.volume == 0)
+        {
+            AudioController.Music(musicTurn.GetComponent<Image>(), musicOFFImage, musicONImage, true);
+            //AudioController.OnMusic(buttonOn, buttonOff);
+        }
+        else
+        {
+            AudioController.Music(musicTurn.GetComponent<Image>(), musicOFFImage, musicONImage, false);
+            //AudioController.OffMusic(buttonOn, buttonOff);
+        }
+ 
+        //AudioController.OnMusic(musicONImage.gameObject, musicOFFImage.gameObject);
     }
 
     void MusicOFFButtonClick()
     {
-        AudioController.OffMusic(musicONImage.image, musicOFFImage.image);
+        AudioController.Music(musicTurn.GetComponent<Image>(), musicOFFImage, musicONImage, false);
+        //AudioController.OffMusic(musicONImage.gameObject, musicOFFImage.gameObject);
     }
 
     private void OnApplicationQuit()

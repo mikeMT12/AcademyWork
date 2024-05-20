@@ -8,6 +8,12 @@ TagManager:
   - MusicOnButton
   - MusicOffButton
   - Game
+  - Wall
+  - Hammer
+  - Floor
+  - Platform
+  - FxTemporaire
+  - ball
   layers:
   - Default
   - TransparentFX

@@ -11,5 +11,10 @@ public class KillZone : MonoBehaviour
         {
 			col.gameObject.GetComponent<PhysicsMovement>().LoadCheckPoint();
 		}
+        
+        else if(col.gameObject.tag == "ball")
+        {
+            Destroy(col.gameObject);
+        }
 	}
 }

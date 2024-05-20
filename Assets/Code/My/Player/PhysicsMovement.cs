@@ -59,6 +59,10 @@ public class PhysicsMovement : MonoBehaviour
     [SerializeField] private SpawnPoint spawnPoint;
     public Vector3 checkPoint;
 
+    [Header("Sound")]
+    [SerializeField] private SoundAndMusicSystem soundSystem;
+
+
     public enum MovementState
     {
         staing,
@@ -87,7 +91,6 @@ public class PhysicsMovement : MonoBehaviour
         /// ground check
         grounded = Physics.Raycast(transform.position + new Vector3(0, 0.2f, 0), Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
         groundedSPH = Physics.CheckSphere(transform.position, 0.2f);
-        //Debug.Log(groundedSPH);
 
         /// handlers
         MyInput();
@@ -113,8 +116,7 @@ public class PhysicsMovement : MonoBehaviour
         /// get player input 
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-/*        Debug.Log($"verticalInput = {verticalInput}, horizontalInput = {horizontalInput},");
-        Debug.Log($"readyToJump = {readyToJump}, grounded = {grounded},");*/
+
 
         /// jump input
         if (Input.GetKey(jumpKey) && readyToJump && grounded)
@@ -262,7 +264,8 @@ public class PhysicsMovement : MonoBehaviour
         /// reset y velocity
         jumped = true;
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse); 
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        soundSystem.jump.Play();
     }
 
     private void ResetJump()

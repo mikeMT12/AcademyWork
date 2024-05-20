@@ -12,28 +12,27 @@ using UnityEngine.Playables;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-
     public GameState state;
     public GameState lastState;
     public static bool FerstTime = true;
-
-    public List<GameObject> countdownNums;
-
     public static event Action<GameState> OnGameStateChanged;
     //public static UnityEvent<GameState> OnGameStateChanged;
 
+    [Header("Systems")]
     [SerializeField] private PlayerAnimatorController playerAnimatorController;
     [SerializeField] private PhysicsMovement movementController;
+    [SerializeField] private SoundAndMusicSystem soundSystem;
     [SerializeField] private CutSceneManager cutSceneManager;
     [SerializeField] private TherdCamera therdCamera;
     [SerializeField] private WorldInfo worldInfo;
+    [SerializeField] private UIManager uiManager;
     [SerializeField] private Timer timer;
+ 
 
 
 
     public enum GameState
     {
-        //StartWindow,
         StartGame,
         Game,
         Pause,
@@ -46,19 +45,11 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        //DontDestroyOnLoad(this.gameObject);
-        //UpdateGameState(GameState.StartWindow);
     }
 
     void Start()
     {
         UpdateGameState(GameState.StartGame);
-        /*if (FerstTime)
-            UpdateGameState(GameState.StartGame);
-        
-        else
-            UpdateGameState(GameState.Game);*/
-
     }
 
     public void UpdateGameState(GameState newState)
@@ -68,9 +59,6 @@ public class GameManager : MonoBehaviour
 
         switch (newState)
         {
-            /*case GameState.StartWindow:
-                HandleStartWindow();
-                break;*/
             case GameState.StartGame:
                 HandleStartGame();
                 break;
@@ -89,56 +77,54 @@ public class GameManager : MonoBehaviour
             case GameState.Lose:
                 HandleLoseGame();
                 break;
-
         }
-
         OnGameStateChanged?.Invoke(newState);
-
     }
 
     private void HandleSettingsGame()
     {
-        
+        timer.timeFlowText.gameObject.SetActive(false);
     }
 
     private void HandleLoseGame()
     {
-        //Time.timeScale = 0;
         movementController.enabled = false;
         therdCamera.enabled = false;
         timer.StopTimer();
         Cursor.lockState = CursorLockMode.Confined;
         playerAnimatorController.SetDeathAnimation();
-
+        soundSystem.loseSound.Play();
     }
 
     private void HandleWinGame()
     {
-        //ime.timeScale = 0;
         therdCamera.enabled = false;
         movementController.enabled = false;
         timer.StopTimer();
         Cursor.lockState = CursorLockMode.Confined;
         playerAnimatorController.SetFinishAnimation();
         worldInfo.PlusCrowns();
-
+        soundSystem.winSound.Play();
     }
 
     private void HandlePauseGame()
     {
+        //soundSystem.inGameMusic.Stop();
         Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.Confined;
         if (!FerstTime)
         {
             timer.StopTimer();
         }
-        
-        
     }
 
     private void HandleGame()
     { 
         Time.timeScale = 1;
+        if(lastState != GameState.Pause)
+        {
+            soundSystem.inGameMusic.Play();
+        }        
         therdCamera.gameObject.SetActive(true);
         movementController.enabled = true;
         timer.timeFlowText.color = Color.black;
@@ -146,14 +132,10 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    /*private void HandleStartWindow()
-    {
-        Cursor.lockState = CursorLockMode.Confined;
-    }*/
-
     private void HandleStartGame()
     {
         cutSceneManager.PlayCutScene();
+        soundSystem.startGameMusic.Play();
         movementController.enabled = false;
         therdCamera.gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
@@ -161,44 +143,14 @@ public class GameManager : MonoBehaviour
         timer.timeFlowText.gameObject.SetActive(false);
         if (FerstTime)
         {
-            
             Debug.Log(cutSceneManager.over);
             Debug.Log(GameState.StartGame);
-            //StartCoroutine(Countdown());
             FerstTime = false;
         }
-        if (cutSceneManager.over)
+        else if (cutSceneManager.over)
         {
-            Debug.Log("StartCountdown");
-            StartCountdown();
+            StartCountdown();        
         }
-        /*Time.timeScale = 1;
-        timer.timeFlowText.gameObject.SetActive(false);
-        cutSceneManager.PlayCutScene();
-        Debug.Log(cutSceneManager.over);
-        Debug.Log(GameState.StartGame);
-        movementController.enabled = false;
-        therdCamera.gameObject.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        StartCoroutine(Countdown());
-        FerstTime = false;*/
-    }
-
-    private IEnumerator Countdown()
-    {
-        therdCamera.gameObject.SetActive(true);
-        int time = 0;
-        while (time != countdownNums.Count)
-        {
-            countdownNums[time].SetActive(true);
-            yield return new WaitForSeconds(1);
-            countdownNums[time].SetActive(false);
-            time++;
-        }
-        Debug.Log("end countdown");
-        UpdateGameState(GameState.Game);
-
-
     }
 
     public void GameStateFromCutScene()
@@ -208,6 +160,9 @@ public class GameManager : MonoBehaviour
 
     public void StartCountdown()
     {
-        StartCoroutine(Countdown());
+        Debug.Log("StartCountdown");
+        soundSystem.startGameMusic.Stop();
+        therdCamera.gameObject.SetActive(true);
+        uiManager.StartCountdown();
     }
 }
