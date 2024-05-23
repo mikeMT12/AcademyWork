@@ -34,7 +34,6 @@ public class WindObstacle : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log(other.gameObject.name);
         now = false;
         StopCoroutine(VizualPart());  
     }
