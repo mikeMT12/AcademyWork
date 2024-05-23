@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
+
 
 public class HealthSystem : MonoBehaviour
 {
@@ -22,7 +20,7 @@ public class HealthSystem : MonoBehaviour
 	{
 		currentHealth -= damage;
 		soundSystem?.getDamage.Play();
-		if(currentHealth == 0)
+		if(currentHealth <= 0)
         {
 			currentHealth = 0;
 			Death();

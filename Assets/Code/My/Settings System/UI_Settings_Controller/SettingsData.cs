@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 using System.IO;
 using UnityEngine.UI;
 using System.Xml.Serialization;
@@ -9,20 +6,14 @@ using System.Xml.Serialization;
 [System.Serializable]
 public class SettingsData 
 {
-    public int musicVolume;
-    public string buttonOnName, buttonOffName;
+    public int musicVolume=1;
+    public string MusicOnButtonImage, MusicOffButtonImage;
     private string filePath;
 
 
     public void CheckFileExist()
     {
-       
-        
-        //SaveInfo();
-        Debug.Log(filePath);
-       
-        //musicVolume = AudioController.volume;
-       
+        Debug.Log(filePath);  
     }
 
     public void SaveInfo()
@@ -32,38 +23,31 @@ public class SettingsData
         var settings = new SettingsData
         {
             musicVolume = AudioController.volume
-           
         };
 
         using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate))
         {
             formatter.Serialize(fs, settings);
         }
-
     }
 
     public void LoadInfo(bool start)
     {
-       
-        
         XmlSerializer formatter = new XmlSerializer(typeof(SettingsData));  
         filePath = Application.dataPath + "/Resources/XMLSettingsData.xml";
         using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate))
         {
             SettingsData settingsData = (SettingsData)formatter.Deserialize(fs);
             AudioController.volume = settingsData.musicVolume;
-            Debug.Log(settingsData.musicVolume);
         }
         if (start)
         {
             AudioListener.volume = AudioController.volume;
-            Debug.Log(AudioController.volume);
         }
         else
         {
             AudioSet();
-        }
-         
+        }         
     }
 
     public void AudioSet()
@@ -72,19 +56,13 @@ public class SettingsData
         GameObject musicOFFImage = GameObject.Find("MusicOffButtonImage");
         GameObject musicTurn = GameObject.Find("MusicTurnButton");
 
-
-
-
-
         if (AudioController.volume == 0)
         {
             AudioController.Music(musicTurn.GetComponent<Image>(), musicOFFImage.GetComponent<Image>(), musicONImage.GetComponent<Image>(), false);
-            //AudioController.OnMusic(buttonOn, buttonOff);
         }
         else
         {
             AudioController.Music(musicTurn.GetComponent<Image>(), musicOFFImage.GetComponent<Image>(), musicONImage.GetComponent<Image>(), true);
-            //AudioController.OffMusic(buttonOn, buttonOff);
         }
     }
 }

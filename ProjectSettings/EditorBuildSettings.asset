@@ -9,9 +9,11 @@ EditorBuildSettings:
     path: Assets/Levels/Scenes/SecondExample.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Levels/Scenes/Zero/ZeroMenu.unity
+    path: Assets/Levels/Scenes/My/ZeroMenu.unity
     guid: 75fa484f65ea943439bb7a5aa1ea88a5
   - enabled: 1
-    path: Assets/Levels/Scenes/Zero/Blockout.unity
+    path: Assets/Levels/Scenes/My/Blockout.unity
     guid: 073392178011a754c820687259594b4c
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: e577d92982d6a99409022b5a73839adf,
+      type: 2}

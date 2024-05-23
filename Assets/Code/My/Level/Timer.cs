@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class Timer : MonoBehaviour
@@ -48,7 +47,6 @@ public class Timer : MonoBehaviour
                 min++;
                 sec = -1;
             }
-            print(delta);
             sec += delta;
             timeFlowText.text = min.ToString("D2") + " : " + sec.ToString("D2");
             yield return new WaitForSeconds(1);

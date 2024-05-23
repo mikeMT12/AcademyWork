@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
-using System;
 using System.IO;
 
 public class WorldInfo : MonoBehaviour
@@ -26,6 +22,12 @@ public class WorldInfo : MonoBehaviour
 
         }
 
+        if(!File.Exists(Application.dataPath + "/Resources/XMLSettingsData.xml"))
+        {
+            print("CreateSettingsInfo");
+            File.Create(Application.dataPath + "/Resources/XMLSettingsData.xml");
+
+        }
     }
 
     void Start()

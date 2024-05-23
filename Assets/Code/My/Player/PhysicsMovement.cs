@@ -1,15 +1,12 @@
-
+using UnityEngine.InputSystem;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class PhysicsMovement : MonoBehaviour
 {
     [Header("Movement")]
     public Rigidbody rb;
     public float walkSpeed;
-    //public float vaultSpeed;
     public float airMinSpeed;  
     public float speedIncreaseMultiplier;
     public float groundDrag;
@@ -28,7 +25,6 @@ public class PhysicsMovement : MonoBehaviour
     private bool readyToJump;
 
     [Header("Keybinds")]
-    public KeyCode jumpKey = KeyCode.Space;
     float horizontalInput;
     float verticalInput;
 
@@ -40,17 +36,13 @@ public class PhysicsMovement : MonoBehaviour
 
     [Header("Player")]
     [SerializeField] private Transform orientation;
+    public static PlayerInput playerInput;
 
     [Header("Animation Controller")]
     [SerializeField] private Animator animator;
     public string isRunning = "isRunning";
     public string isJumping = "isJumping";
     public string isFlying = "isFlying";
-
-    [Header("Text Out")]
-    [SerializeField] private TextMeshProUGUI text_speed;
-    [SerializeField] private TextMeshProUGUI text_mode;
-
 
     [Header("Variabels Out")]
     public MovementState state;
@@ -73,6 +65,10 @@ public class PhysicsMovement : MonoBehaviour
 
     private void Awake()
     {
+        playerInput = new PlayerInput();
+        playerInput.CharacterControls.Enable();
+        playerInput.CharacterControls.Jump.performed += CheckJump;
+        playerInput.CharacterControls.Jump.started += CheckJump;
         rb = GetComponent<Rigidbody>();
         spawnPoint.SpawnPlayer(this.gameObject);
         checkPoint = spawnPoint.transform.position;
@@ -84,6 +80,7 @@ public class PhysicsMovement : MonoBehaviour
         rb.freezeRotation = true;
         jumped = false;
         readyToJump = true;
+
     }
 
     private void Update()
@@ -97,7 +94,6 @@ public class PhysicsMovement : MonoBehaviour
         SpeedControl();
         StateHandler();
         AnimationHandler();
-        TextStuff();
 
         /// handle drag
         if (state == MovementState.walking || state == MovementState.staing)
@@ -116,17 +112,21 @@ public class PhysicsMovement : MonoBehaviour
         /// get player input 
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
+    }
 
-
+    private void CheckJump(InputAction.CallbackContext context)
+    {
         /// jump input
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
+        if (readyToJump && grounded)
         {
             readyToJump = false;
-           
+
             Jump();
 
             Invoke(nameof(ResetJump), jumpCooldown);
+            
         }
+        StartCoroutine(JumpCooldown(context));
     }
 
 
@@ -136,7 +136,6 @@ public class PhysicsMovement : MonoBehaviour
         if (grounded)
         {
             jumped = false;
-            //Debug.Log(moveSpeed);
             nowspeed = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
             if (nowspeed.magnitude > 2)
@@ -166,13 +165,14 @@ public class PhysicsMovement : MonoBehaviour
             }
         }
 
+
+        ///smooth stopping
         bool desiredMoveSpeedHasChanged = desiredMoveSpeed != lastDesiredMoveSpeed;
 
         if (desiredMoveSpeedHasChanged)
         {
             if (keepMomentum)
             {
-                StopAllCoroutines();
                 StartCoroutine(SmoothlyLerpMoveSpeed());
             }
             else
@@ -274,18 +274,35 @@ public class PhysicsMovement : MonoBehaviour
         readyToJump = true;
     }
 
+    private IEnumerator JumpCooldown(InputAction.CallbackContext context)
+    {
+        /// check if space is hold 
+        while(context.phase == InputActionPhase.Performed || context.phase == InputActionPhase.Started)
+        {
+            if (readyToJump && grounded)
+            {
+                readyToJump = false;
+
+                Jump();
+
+                Invoke(nameof(ResetJump), jumpCooldown);
+            }
+            yield return new WaitForSeconds(jumpCooldown);
+        }
+    }
+
     public void LoadCheckPoint()
     {
+        /// check point load (if needed) 
         transform.position = checkPoint;
     }
 
-    private void TextStuff()
+    private void OnDestroy()
     {
-        /// text output
-        text_speed.SetText("Speed: " + nowspeed.magnitude + " / " + moveSpeed);
-        text_mode.SetText(state.ToString());
+        ///usubscribe from actions
+        playerInput.CharacterControls.Jump.performed -= CheckJump;
+        playerInput.CharacterControls.Jump.started -= CheckJump;
     }
 
- 
 }
 

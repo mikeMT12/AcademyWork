@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.Timeline;
     
 public class CutSceneManager : MonoBehaviour
 {
@@ -23,8 +21,6 @@ public class CutSceneManager : MonoBehaviour
         else
         {
             over = true;
-            //cutScenes[0].Play();
-            //GameManager.Instance.UpdateGameState(GameManager.GameState.Game);
         }  
     }
 

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TrapObstacle : MonoBehaviour
@@ -8,6 +7,10 @@ public class TrapObstacle : MonoBehaviour
     public LayerMask layerDamage;
     private bool isTrapActive = false;
     private bool getInTrap = false;
+
+    public float activeTime = 1.6f;
+    public float damageTime = 0.3f;
+    public float resetTime = 5;
 
     [SerializeField] private GameObject vizualObject;
     [SerializeField] private Material inActiveMaterial;
@@ -19,14 +22,13 @@ public class TrapObstacle : MonoBehaviour
 
     public bool CheckInTrap()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, GetComponent<CapsuleCollider>().radius * transform.localScale.x);
+        //Collider[] hitColliders = Physics.OverlapSphere(transform.position, GetComponent<CapsuleCollider>().radius * transform.localScale.x);
 
-        //Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, GetComponent<BoxCollider>().size / 2, Quaternion.identity, layerDamage);
+        Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, GetComponent<BoxCollider>().size*2, gameObject.transform.rotation, layerDamage);
         for (int i = 0; i < hitColliders.Length; i++)
         {
             if (hitColliders[i].gameObject.tag == "Player")
             {
-                //print($"HIT TO DAMAGE Player - {hitColliders[i].gameObject.name}");
                 getInTrap = true;
                 break;
             }
@@ -42,7 +44,6 @@ public class TrapObstacle : MonoBehaviour
 
     public void DamagePlayer()
     {
-        //SetMaterial(DamageMaterial);
         EventBus.TakeDamage.Invoke(damage);
         print("DAMAGE!");
     }
@@ -67,38 +68,28 @@ public class TrapObstacle : MonoBehaviour
         if (isTrapActive == false)
         {
             isTrapActive = true;
-
-            //Debug.Log("SetTrapActive");
-
             SetMaterial(ActiveMaterial);
             //Debug.Log("You get in the TRAP! 1 second to damage!");
+            yield return new WaitForSeconds(activeTime);
 
-            yield return new WaitForSeconds(1.6f);
             CheckInTrap();
-            
             if (CheckInTrap())
             {   
                 DamagePlayer();
             }
             SetMaterial(DamageMaterial);
             getInTrap = false;
-            
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(damageTime);
 
             SetMaterial(inActiveMaterial);
-
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(resetTime);
 
             isTrapActive = false;
-
             if (CheckInTrap())
             {
                 StartCoroutine(ActivateTrap());
             }
-
-            
-        }
-       
+        }  
     }
 
 }

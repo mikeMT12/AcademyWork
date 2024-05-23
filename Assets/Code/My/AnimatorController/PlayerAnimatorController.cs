@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAnimatorController : MonoBehaviour
 {
 
     [SerializeField] private Animator playerAnimnator;
-    //[SerializeField] private Animation deathAnimation;
     int isDeadHash;
     int isFinished;
 
@@ -19,13 +16,11 @@ public class PlayerAnimatorController : MonoBehaviour
 
     public void SetDeathAnimation()
     {
-        //playerAnimnator.SetBool(isDeadHash, true);
         playerAnimnator.Play("isDead");
     }
 
     public void SetFinishAnimation()
     {
-        //playerAnimnator.SetBool(isFinished, true);
         playerAnimnator.Play("isFinished");
     }
 

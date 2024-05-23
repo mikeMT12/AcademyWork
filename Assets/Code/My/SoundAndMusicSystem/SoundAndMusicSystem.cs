@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundAndMusicSystem : MonoBehaviour
@@ -17,6 +15,5 @@ public class SoundAndMusicSystem : MonoBehaviour
     [Header("Music")]
     public AudioSource inGameMusic;
     public AudioSource startGameMusic;
-    //[SerializeField] AudioClip pauseGameMusic;
 
 }

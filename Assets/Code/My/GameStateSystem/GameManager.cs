@@ -1,13 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.Playables;
-
-
 
 public class GameManager : MonoBehaviour
 {
@@ -16,7 +8,6 @@ public class GameManager : MonoBehaviour
     public GameState lastState;
     public static bool FerstTime = true;
     public static event Action<GameState> OnGameStateChanged;
-    //public static UnityEvent<GameState> OnGameStateChanged;
 
     [Header("Systems")]
     [SerializeField] private PlayerAnimatorController playerAnimatorController;
@@ -27,8 +18,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private WorldInfo worldInfo;
     [SerializeField] private UIManager uiManager;
     [SerializeField] private Timer timer;
- 
-
 
 
     public enum GameState
@@ -91,7 +80,8 @@ public class GameManager : MonoBehaviour
         movementController.enabled = false;
         therdCamera.enabled = false;
         timer.StopTimer();
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         playerAnimatorController.SetDeathAnimation();
         soundSystem.loseSound.Play();
     }
@@ -100,8 +90,9 @@ public class GameManager : MonoBehaviour
     {
         therdCamera.enabled = false;
         movementController.enabled = false;
-        timer.StopTimer();
-        Cursor.lockState = CursorLockMode.Confined;
+        timer.StopTimer();      
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         playerAnimatorController.SetFinishAnimation();
         worldInfo.PlusCrowns();
         soundSystem.winSound.Play();
@@ -110,8 +101,10 @@ public class GameManager : MonoBehaviour
     private void HandlePauseGame()
     {
         //soundSystem.inGameMusic.Stop();
+        
         Time.timeScale = 0;
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         if (!FerstTime)
         {
             timer.StopTimer();
@@ -143,8 +136,6 @@ public class GameManager : MonoBehaviour
         timer.timeFlowText.gameObject.SetActive(false);
         if (FerstTime)
         {
-            Debug.Log(cutSceneManager.over);
-            Debug.Log(GameState.StartGame);
             FerstTime = false;
         }
         else if (cutSceneManager.over)
@@ -160,7 +151,6 @@ public class GameManager : MonoBehaviour
 
     public void StartCountdown()
     {
-        Debug.Log("StartCountdown");
         soundSystem.startGameMusic.Stop();
         therdCamera.gameObject.SetActive(true);
         uiManager.StartCountdown();
